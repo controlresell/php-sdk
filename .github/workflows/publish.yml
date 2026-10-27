@@ -1,0 +1,21 @@
+name: Publish
+# Manual only. A Composer package is published by pushing a version tag (Packagist reads the tags of the repository
+# through its GitHub hook), which this workflow never does: it only validates and tests the package, without any
+# credential.
+on:
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+      - run: composer validate --strict
+      - run: composer update --no-interaction --no-progress --prefer-dist
+      - run: vendor/bin/phpunit
+      - name: Archive (no publication)
+        run: composer archive --format=zip --dir=build
