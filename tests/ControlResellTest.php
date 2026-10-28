@@ -142,10 +142,12 @@ final class ControlResellTest extends TestCase
 
         self::assertSame(7, $result->getItemId());
         self::assertCount(3, $this->sent);
+        self::assertSame(['publish', 'price-drop', 'republish'], array_map(fn ($r) => basename($r->getUri()->getPath()), $this->sent));
         foreach ($this->sent as $request) {
+            self::assertSame('POST', $request->getMethod());
             $body = json_decode((string) $request->getBody(), true, flags: JSON_THROW_ON_ERROR);
             self::assertArrayHasKey('scheduledAt', $body);
-            self::assertSame($at->getTimestamp(), (new \DateTime($body['scheduledAt']))->getTimestamp());
+            self::assertMatchesRegularExpression('/^2026-11-01T09:30:00(\+00:00|Z)$/', $body['scheduledAt']);
         }
     }
 

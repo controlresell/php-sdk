@@ -13,7 +13,6 @@ use ControlResell\ControlResell;
 use ControlResell\Exception\NotFoundException;
 use ControlResell\Generated\Model\ItemCreateRequest;
 use ControlResell\Generated\Model\PublishRequest;
-use ControlResell\Generated\Model\RepublishRequest;
 
 $client = new ControlResell(apiKey: 'cr_live_...'); // or set CONTROLRESELL_API_KEY
 
@@ -33,11 +32,10 @@ foreach ($client->listAllCatalogBrands(q: 'nik') as $brand) { // the identifiers
 $item = $client->items->createItem(new ItemCreateRequest(['name' => 'Jacket']));
 $client->idempotent('publish-' . $item->getId(), fn () => $client->items->publishItem(
     $item->getId(),
-    new PublishRequest(['account_ids' => ['<account id>']]),
+    new PublishRequest(['account_ids' => ['<account id>'], 'scheduled_at' => new DateTime('+1 day')]),
 ));
-// publishItem, dropItemPrice and republishItem take an optional `scheduled_at` (a DateTime): the action starts then
-// instead of now. The 202 receipt carries the date.
-$client->items->republishItem($item->getId(), new RepublishRequest(['scheduled_at' => new DateTime('+1 day')]));
+// publishItem, dropItemPrice and republishItem take an optional `scheduled_at` (a DateTime, at most 30 days ahead): the
+// action starts then instead of now (tomorrow above). The 202 receipt carries the date.
 
 try {
     $client->items->getItem(42);
