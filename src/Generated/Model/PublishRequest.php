@@ -58,7 +58,8 @@ class PublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $openAPITypes = [
         'account_ids' => 'string[]',
-        'cancel_before_proceeding' => 'bool'
+        'cancel_before_proceeding' => 'bool',
+        'scheduled_at' => '\DateTime'
     ];
 
     /**
@@ -70,7 +71,8 @@ class PublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $openAPIFormats = [
         'account_ids' => 'uuid',
-        'cancel_before_proceeding' => null
+        'cancel_before_proceeding' => null,
+        'scheduled_at' => 'date-time'
     ];
 
     /**
@@ -80,7 +82,8 @@ class PublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static array $openAPINullables = [
         'account_ids' => false,
-        'cancel_before_proceeding' => true
+        'cancel_before_proceeding' => true,
+        'scheduled_at' => true
     ];
 
     /**
@@ -170,7 +173,8 @@ class PublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $attributeMap = [
         'account_ids' => 'accountIds',
-        'cancel_before_proceeding' => 'cancelBeforeProceeding'
+        'cancel_before_proceeding' => 'cancelBeforeProceeding',
+        'scheduled_at' => 'scheduledAt'
     ];
 
     /**
@@ -180,7 +184,8 @@ class PublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $setters = [
         'account_ids' => 'setAccountIds',
-        'cancel_before_proceeding' => 'setCancelBeforeProceeding'
+        'cancel_before_proceeding' => 'setCancelBeforeProceeding',
+        'scheduled_at' => 'setScheduledAt'
     ];
 
     /**
@@ -190,7 +195,8 @@ class PublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $getters = [
         'account_ids' => 'getAccountIds',
-        'cancel_before_proceeding' => 'getCancelBeforeProceeding'
+        'cancel_before_proceeding' => 'getCancelBeforeProceeding',
+        'scheduled_at' => 'getScheduledAt'
     ];
 
     /**
@@ -252,6 +258,7 @@ class PublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $this->setIfExists('account_ids', $data ?? [], null);
         $this->setIfExists('cancel_before_proceeding', $data ?? [], null);
+        $this->setIfExists('scheduled_at', $data ?? [], null);
     }
 
     /**
@@ -356,6 +363,40 @@ class PublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
             }
         }
         $this->container['cancel_before_proceeding'] = $cancel_before_proceeding;
+
+        return $this;
+    }
+
+    /**
+     * Gets scheduled_at
+     *
+     * @return \DateTime|null
+     */
+    public function getScheduledAt()
+    {
+        return $this->container['scheduled_at'];
+    }
+
+    /**
+     * Sets scheduled_at
+     *
+     * @param \DateTime|null $scheduled_at scheduled_at
+     *
+     * @return self
+     */
+    public function setScheduledAt($scheduled_at)
+    {
+        if (is_null($scheduled_at)) {
+            array_push($this->openAPINullablesSetToNull, 'scheduled_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('scheduled_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['scheduled_at'] = $scheduled_at;
 
         return $this;
     }

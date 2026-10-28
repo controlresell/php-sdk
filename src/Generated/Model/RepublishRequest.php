@@ -60,7 +60,8 @@ class RepublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'account_ids' => 'string[]',
         'price_drop' => '\ControlResell\Generated\Model\PriceDropRequest',
         'price_variation' => 'string',
-        'allow_if_deleted' => 'bool'
+        'allow_if_deleted' => 'bool',
+        'scheduled_at' => '\DateTime'
     ];
 
     /**
@@ -74,7 +75,8 @@ class RepublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'account_ids' => 'uuid',
         'price_drop' => null,
         'price_variation' => null,
-        'allow_if_deleted' => null
+        'allow_if_deleted' => null,
+        'scheduled_at' => 'date-time'
     ];
 
     /**
@@ -86,7 +88,8 @@ class RepublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'account_ids' => true,
         'price_drop' => true,
         'price_variation' => true,
-        'allow_if_deleted' => true
+        'allow_if_deleted' => true,
+        'scheduled_at' => true
     ];
 
     /**
@@ -178,7 +181,8 @@ class RepublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'account_ids' => 'accountIds',
         'price_drop' => 'priceDrop',
         'price_variation' => 'priceVariation',
-        'allow_if_deleted' => 'allowIfDeleted'
+        'allow_if_deleted' => 'allowIfDeleted',
+        'scheduled_at' => 'scheduledAt'
     ];
 
     /**
@@ -190,7 +194,8 @@ class RepublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'account_ids' => 'setAccountIds',
         'price_drop' => 'setPriceDrop',
         'price_variation' => 'setPriceVariation',
-        'allow_if_deleted' => 'setAllowIfDeleted'
+        'allow_if_deleted' => 'setAllowIfDeleted',
+        'scheduled_at' => 'setScheduledAt'
     ];
 
     /**
@@ -202,7 +207,8 @@ class RepublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'account_ids' => 'getAccountIds',
         'price_drop' => 'getPriceDrop',
         'price_variation' => 'getPriceVariation',
-        'allow_if_deleted' => 'getAllowIfDeleted'
+        'allow_if_deleted' => 'getAllowIfDeleted',
+        'scheduled_at' => 'getScheduledAt'
     ];
 
     /**
@@ -266,6 +272,7 @@ class RepublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('price_drop', $data ?? [], null);
         $this->setIfExists('price_variation', $data ?? [], null);
         $this->setIfExists('allow_if_deleted', $data ?? [], null);
+        $this->setIfExists('scheduled_at', $data ?? [], null);
     }
 
     /**
@@ -442,6 +449,40 @@ class RepublishRequest implements ModelInterface, ArrayAccess, \JsonSerializable
             }
         }
         $this->container['allow_if_deleted'] = $allow_if_deleted;
+
+        return $this;
+    }
+
+    /**
+     * Gets scheduled_at
+     *
+     * @return \DateTime|null
+     */
+    public function getScheduledAt()
+    {
+        return $this->container['scheduled_at'];
+    }
+
+    /**
+     * Sets scheduled_at
+     *
+     * @param \DateTime|null $scheduled_at scheduled_at
+     *
+     * @return self
+     */
+    public function setScheduledAt($scheduled_at)
+    {
+        if (is_null($scheduled_at)) {
+            array_push($this->openAPINullablesSetToNull, 'scheduled_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('scheduled_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['scheduled_at'] = $scheduled_at;
 
         return $this;
     }
