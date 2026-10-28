@@ -61,7 +61,8 @@ class PriceDropRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'value' => 'string',
         'round_type' => 'string',
         'round_step' => 'string',
-        'account_ids' => 'string[]'
+        'account_ids' => 'string[]',
+        'scheduled_at' => '\DateTime'
     ];
 
     /**
@@ -76,7 +77,8 @@ class PriceDropRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'value' => null,
         'round_type' => null,
         'round_step' => null,
-        'account_ids' => 'uuid'
+        'account_ids' => 'uuid',
+        'scheduled_at' => 'date-time'
     ];
 
     /**
@@ -89,7 +91,8 @@ class PriceDropRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'value' => false,
         'round_type' => true,
         'round_step' => true,
-        'account_ids' => true
+        'account_ids' => true,
+        'scheduled_at' => true
     ];
 
     /**
@@ -182,7 +185,8 @@ class PriceDropRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'value' => 'value',
         'round_type' => 'roundType',
         'round_step' => 'roundStep',
-        'account_ids' => 'accountIds'
+        'account_ids' => 'accountIds',
+        'scheduled_at' => 'scheduledAt'
     ];
 
     /**
@@ -195,7 +199,8 @@ class PriceDropRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'value' => 'setValue',
         'round_type' => 'setRoundType',
         'round_step' => 'setRoundStep',
-        'account_ids' => 'setAccountIds'
+        'account_ids' => 'setAccountIds',
+        'scheduled_at' => 'setScheduledAt'
     ];
 
     /**
@@ -208,7 +213,8 @@ class PriceDropRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'value' => 'getValue',
         'round_type' => 'getRoundType',
         'round_step' => 'getRoundStep',
-        'account_ids' => 'getAccountIds'
+        'account_ids' => 'getAccountIds',
+        'scheduled_at' => 'getScheduledAt'
     ];
 
     /**
@@ -273,6 +279,7 @@ class PriceDropRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('round_type', $data ?? [], null);
         $this->setIfExists('round_step', $data ?? [], null);
         $this->setIfExists('account_ids', $data ?? [], null);
+        $this->setIfExists('scheduled_at', $data ?? [], null);
     }
 
     /**
@@ -475,6 +482,40 @@ class PriceDropRequest implements ModelInterface, ArrayAccess, \JsonSerializable
             }
         }
         $this->container['account_ids'] = $account_ids;
+
+        return $this;
+    }
+
+    /**
+     * Gets scheduled_at
+     *
+     * @return \DateTime|null
+     */
+    public function getScheduledAt()
+    {
+        return $this->container['scheduled_at'];
+    }
+
+    /**
+     * Sets scheduled_at
+     *
+     * @param \DateTime|null $scheduled_at scheduled_at
+     *
+     * @return self
+     */
+    public function setScheduledAt($scheduled_at)
+    {
+        if (is_null($scheduled_at)) {
+            array_push($this->openAPINullablesSetToNull, 'scheduled_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('scheduled_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['scheduled_at'] = $scheduled_at;
 
         return $this;
     }

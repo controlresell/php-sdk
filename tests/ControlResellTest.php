@@ -14,6 +14,9 @@ use ControlResell\Exception\RateLimitException;
 use ControlResell\Exception\ServerException;
 use ControlResell\Generated\Model\Item;
 use ControlResell\Generated\Model\ItemCreateRequest;
+use ControlResell\Generated\Model\PriceDropRequest;
+use ControlResell\Generated\Model\PublishRequest;
+use ControlResell\Generated\Model\RepublishRequest;
 use ControlResell\RetryPolicy;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Handler\MockHandler;
@@ -124,6 +127,25 @@ final class ControlResellTest extends TestCase
         self::assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $key);
         foreach ($this->sent as $attempt) {
             self::assertSame($key, $attempt->getHeaderLine('Idempotency-Key'));
+        }
+    }
+
+    public function testPublishPriceDropAndRepublishCarryScheduledAt(): void
+    {
+        $receipt = ['itemId' => 7, 'action' => 'publish', 'accountIds' => ['3f2c1c0e-5b7a-4a3e-9d1e-0a1b2c3d4e5f'], 'scheduledAt' => '2026-11-01T09:30:00Z'];
+        $client = $this->client([self::json(202, $receipt), self::json(202, $receipt), self::json(202, $receipt)]);
+        $at = new \DateTime('2026-11-01T09:30:00Z');
+
+        $result = $client->items->publishItem(7, new PublishRequest(['account_ids' => ['3f2c1c0e-5b7a-4a3e-9d1e-0a1b2c3d4e5f'], 'scheduled_at' => $at]));
+        $client->items->dropItemPrice(7, new PriceDropRequest(['type' => 'percent', 'value' => '10', 'scheduled_at' => $at]));
+        $client->items->republishItem(7, new RepublishRequest(['scheduled_at' => $at]));
+
+        self::assertSame(7, $result->getItemId());
+        self::assertCount(3, $this->sent);
+        foreach ($this->sent as $request) {
+            $body = json_decode((string) $request->getBody(), true, flags: JSON_THROW_ON_ERROR);
+            self::assertArrayHasKey('scheduledAt', $body);
+            self::assertSame($at->getTimestamp(), (new \DateTime($body['scheduledAt']))->getTimestamp());
         }
     }
 
